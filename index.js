@@ -21,8 +21,8 @@ app.use(express.json())
 
 
 // import routes
-const menuRoutes = require('./routes/menu')
-const orderRoutes = require('./routes/order')
+const menuRoutes = require('./app/routes/menu')
+const orderRoutes = require('./app/routes/order')
 
 app.post("/test/new", (req, res) => {
     console.log(req.body)
