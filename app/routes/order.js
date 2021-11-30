@@ -8,12 +8,12 @@ const MENU_API_URL = 'http://menu-env.eba-5hsjxsvv.us-west-2.elasticbeanstalk.co
 
 router.post('/create/', (req, res) => {
   console.log(req.body)
-      axios.post(`${ORDER_API_URL}/create/`, req.body,{
-       headers: {'Content-Type': 'application/json'}
-   })
-   .then((response) => {
+    axios.post(`${ORDER_API_URL}/create/`, req.body,{
+    headers: {'Content-Type': 'application/json'}
+    })
+    .then((response) => {
        res.status(200).send(response.data)
-   })
+    })
 
 })
 
