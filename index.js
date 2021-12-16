@@ -4,6 +4,7 @@ const cors=require("cors");
 
 
 const app = express()
+let server = require('http').createServer(app)
 
 
 const PORT = 3000
@@ -32,9 +33,15 @@ app.post("/test/new", (req, res) => {
 
 
 // endpoints
+app.get("/", (req, res) => {
+    res.send('hello world')
+});
 app.use('/menu', menuRoutes)
 app.use('/order', orderRoutes)
 
-app.listen(PORT, () => {
+// test socket.io
+require('./app/socket.js').initialize(server);
+
+server.listen(PORT, () => {
     console.log(`API Gateway has started on port ${PORT}`)
 })
