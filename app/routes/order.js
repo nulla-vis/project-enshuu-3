@@ -18,7 +18,6 @@ router.post('/create/', (req, res) => {
 router.get('/allIncoming', (req, res) => {
   axios.get(`${ORDER_API_URL}/incoming/`).then((response) => {
       res.status(200).send(response.data)
-      console.log(response.data.length)
   })
 })
 
