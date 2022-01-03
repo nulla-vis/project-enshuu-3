@@ -7,12 +7,33 @@ exports.initialize = function(server) {
 
     let io = require('socket.io')(server, {cors: {origin: "*"}})
 
-    let userCount = 0
-    let totalIncomingOrder = 'bdbdb'
 
     io.on('connection', function(socket){
-        userCount++
-        io.emit('userCount', {userCount: userCount, userName: totalIncomingOrder})
+        let order_data = []
+        let order_id_array = []
+        axios.get(`${ORDER_API_URL}/incoming/`).then((response) => {
+            order_data.push(response.data)
+            order_data[0].forEach(data => {
+                data.menu_title = "pending..."
+                data.menu_image = "pending..."
+                order_id_array.push(data.menu_id)
+            })
+            axios.post(`${MENU_LIST_API_URL}`, {"id_list" : `"${order_id_array}"`},{
+                headers: {'Content-Type': 'application/json'}
+            })
+            .then((response) => {
+                order_data[0].forEach(data => {
+                    response.data.menus.forEach(menu => {
+                        if(data.menu_id === menu.id) {
+                            data.menu_title = menu.title
+                            data.menu_image = menu.menu_image
+                        }
+                    })
+                })
+                io.emit('getAllOrder', {order : order_data[0]})
+            })
+        })
+        
 
         socket.on('newOrder', () => {
             let order_data = []
@@ -20,6 +41,7 @@ exports.initialize = function(server) {
             axios.get(`${ORDER_API_URL}/incoming/`).then((response) => {
                 order_data.push(response.data)
                 order_data[0].forEach(data => {
+                    data.menu_title = "pending..."
                     data.menu_image = "pending..."
                     order_id_array.push(data.menu_id)
                 })
@@ -30,6 +52,7 @@ exports.initialize = function(server) {
                     order_data[0].forEach(data => {
                         response.data.menus.forEach(menu => {
                             if(data.menu_id === menu.id) {
+                                data.menu_title = menu.title
                                 data.menu_image = menu.menu_image
                             }
                         })
