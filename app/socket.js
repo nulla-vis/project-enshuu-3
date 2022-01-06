@@ -15,10 +15,9 @@ exports.initialize = function(server) {
             axios.get(`${ORDER_API_URL}/incoming/`).then((response) => {
                 order_data.push(response.data)
                 order_data[0].forEach(data => {
-                    // data.menu_title = "pending..."
-                    // data.menu_image = "pending..."
                     order_id_array.push(data.menu_id)
                 })
+                console.log(order_id_array)
                 if(order_id_array.length != 0 ) {
                     axios.post(`${MENU_LIST_API_URL}`, {"id_list" : `"${order_id_array}"`},{
                         headers: {'Content-Type': 'application/json'}
@@ -36,6 +35,8 @@ exports.initialize = function(server) {
                     }).catch(function () {
                         console.log("Socket-Connection-post Promise Rejected");
                    });
+                }else {
+                    socket.emit('getAllOrder', {message: 'no data'})
                 }
             }).catch(function () {
                 console.log("Socket-Connection-get Promise Rejected");
