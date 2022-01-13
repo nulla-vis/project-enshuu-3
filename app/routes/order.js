@@ -29,10 +29,21 @@ router.post('/update', (req,res) => {
   })
 })
 
+router.post('/delete', (req, res) => {
+  const id = req.body.id
+  axios.delete(`${ORDER_API_URL}/${id}`, {
+    headers: {'Content-Type': 'application/json'}
+  }).then((response) => {
+    res.send(response.data)
+  })
+})
 router.get('/allIncoming', (req, res) => {
-  // console.log('allIncoming')
   axios.get(`${ORDER_API_URL}/incoming/`).then((response) => {
-    cartDetail(res, response)
+    if(response.data.length == 0) {
+      res.send({message: 'empty'})
+    }else {
+      cartDetail(res, response)
+    }
   }).catch(function () {
     console.log("API-GET Promise Rejected");
   });
@@ -47,7 +58,6 @@ router.get('/allFinishedDetail', (req, res) => {
 })
 
 router.get('/allOrders', (req, res) => {
-  // console.log('allIncoming')
   axios.get(`${ORDER_API_URL}/allOrders`).then((response) => {
     res.status(200).send(response.data)
   }).catch(err => {
