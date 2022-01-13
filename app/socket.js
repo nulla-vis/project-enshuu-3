@@ -17,7 +17,6 @@ exports.initialize = function(server) {
                 order_data[0].forEach(data => {
                     order_id_array.push(data.menu_id)
                 })
-                console.log(order_id_array)
                 if(order_id_array.length != 0 ) {
                     axios.post(`${MENU_LIST_API_URL}`, {"id_list" : `"${order_id_array}"`},{
                         headers: {'Content-Type': 'application/json'}
